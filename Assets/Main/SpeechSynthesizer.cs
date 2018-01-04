@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//  ☆ 参考にしたサイト一覧 ☆
+//      ☆ 参考にしたサイト一覧 ☆
 //  Unityでdocomoの音声合成APIを使用する方法
 //      https://qiita.com/kanatano_mirai/items/677fde8589a4d810329a
 //  ドコモの音声合成APIにしゃべってもらおうと思ったけど...
@@ -16,9 +16,14 @@ using UnityEngine;
 //  Unity - Scripting API: AudioClip
 //      https://docs.unity3d.com/ScriptReference/AudioClip.html
 
-// 少しクラス大きくしすぎた...
-// 音声データの変換のとこ別のクラスに分けてもいいかも？
-// あとできれば一つのAPI専用じゃなくて別のAPIでも動くように汎用性をもたせたい
+//      ★ SpeechSynthesizerクラスの使い方 ★
+//  ・SpeechSynthesizerクラスをnewします
+//    引数のvoiceは声の種類，callerは呼び出す側のMonoBehaviourを指定してください
+//  ・SpeechInfoクラスを喋らせたいパラメータでnewして，
+//    SpeechSynthesizerのspeakメソッドに引数として渡せば喋ってくれます
+
+// クラス大きくしすぎた
+// できれば一つのAPI専用じゃなくて別のAPIでも動くように汎用性をもたせたい
 public class SpeechSynthesizer {
     // 声の種類
     public enum Voice {
@@ -61,7 +66,8 @@ public class SpeechSynthesizer {
     public class SpeechInfo {
         // ↓APIの仕様
         // https://dev.smt.docomo.ne.jp/?p=docs.api.page&api_name=text_to_speech&p_name=api_1
-        // 実数値は範囲が決まってるので一応コンストラクタでエラーチェックしてます
+        // 実数値の基準値（デフォルト）は1.0です
+        // 値の範囲が決まってるので一応コンストラクタでエラーチェックしてます
         // 小数点第二位まで指定可能なので余分は切捨してます(1.2345なら45は切捨）
         // まだパラメータあんま弄ってないのでいろいろ試してみてください
         // このクラスは単なるパラメータ保存用の構造体みたいなもんで
