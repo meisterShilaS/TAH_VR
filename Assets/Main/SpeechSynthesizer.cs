@@ -45,11 +45,18 @@ public class SpeechSynthesizer {
     }
 
     public class SpeechInfo {
-        public readonly string text;
-        public readonly double pitch;
-        public readonly double range;
-        public readonly double rate;
-        public readonly double volume;
+        // ↓APIの仕様
+        // https://dev.smt.docomo.ne.jp/?p=docs.api.page&api_name=text_to_speech&p_name=api_1
+        // 実数値は範囲が決まってるので一応コンストラクタでエラーチェックしてます
+        // 小数点第二位まで指定可能なので余分は切捨してます(1.2345なら45は切捨）
+        // まだパラメータあんま弄ってないのでいろいろ試してみてください
+        // このクラスは単なるパラメータ保存用の構造体みたいなもんで
+        // 実際のサーバに送るデータはgenerateSSMLで作ってます
+        public readonly string text;    // 喋らせる内容
+        public readonly double pitch;   // 声の高さ(0.50～2.00)
+        public readonly double range;   // 声の高さが変化する範囲？だと思う(0.00～2.00)
+        public readonly double rate;    // 読み上げる速さ(0.50～4.00)
+        public readonly double volume;  // 音量(0.00～2.00)
 
         public SpeechInfo(  string text,
                             double pitch  = 1.0,
