@@ -2,6 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//  ☆ 参考にしたサイト一覧 ☆
+//  Unityでdocomoの音声合成APIを使用する方法
+//      https://qiita.com/kanatano_mirai/items/677fde8589a4d810329a
+//  ドコモの音声合成APIにしゃべってもらおうと思ったけど...
+//      https://qiita.com/tkinjo1/items/a1cf73a471f06ab3ff65
+//  Unityのコルーチン機能を使う 
+//      https://cfm-art.sakura.ne.jp/sys/archives/419
+//  【Unity】WWWクラスを利用して、JSONを読み込む
+//      http://albatrus.com/main/unity/7510
+//  音声合成リファレンス
+//      https://dev.smt.docomo.ne.jp/?p=docs.api.page&api_name=text_to_speech&p_name=api_1
+//  Unity - Scripting API: AudioClip
+//      https://docs.unity3d.com/ScriptReference/AudioClip.html
+
 // 少しクラス大きくしすぎた...
 // 音声データの変換のとこ別のクラスに分けてもいいかも？
 // あとできれば一つのAPI専用じゃなくて別のAPIでも動くように汎用性をもたせたい
