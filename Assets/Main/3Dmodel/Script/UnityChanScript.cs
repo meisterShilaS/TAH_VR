@@ -9,6 +9,8 @@ public class UnityChanScript : MonoBehaviour {
 
     private SpeechSynthesizer synth;
 
+    private string VoiceString="";
+
 	// Use this for initialization
 	void Start () {
         this.animator = GetComponent<Animator>();
@@ -17,27 +19,38 @@ public class UnityChanScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey("1"))
+        if (VoiceString=="こんにちは")
         {
-            if(!this.animator.GetBool("Pause1")) {
-                synth.speak(new SpeechSynthesizer.SpeechInfo("ただいまマイクのテスト中", pitch:1.5));
-            }
             this.animator.SetBool("Pause1", true);
+            if (this.animator.GetBool("Pause1"))
+            {
+                synth.speak(new SpeechSynthesizer.SpeechInfo("ただいまマイクのテスト中", pitch: 1.5));
+            }
+            VoiceString = "";
         }
         else
         {
             this.animator.SetBool("Pause1", false);
         }
-        if (Input.GetKey("2"))
+        if (VoiceString == "じゃあね")
         {
-            if(!this.animator.GetBool("Pause2")) {
-                synth.speak(new SpeechSynthesizer.SpeechInfo("声の高さも自由自在", pitch:1.0));
-            }
             this.animator.SetBool("Pause2", true);
+            if (this.animator.GetBool("Pause2"))
+            {
+                synth.speak(new SpeechSynthesizer.SpeechInfo("声の高さも自由自在", pitch: 1.0));
+            }
+            VoiceString = "";
         }
         else
         {
             this.animator.SetBool("Pause2", false);
         }
     }
+
+
+    public void SetVoiceStr(string str)
+    {
+        this.VoiceString = str;
+    }
+
 }

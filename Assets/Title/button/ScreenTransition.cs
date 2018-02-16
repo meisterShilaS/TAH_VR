@@ -17,11 +17,14 @@ public class ScreenTransition : MonoBehaviour {
 
     public void SceneLoad()
     {
-        // java側の音声認識を開始するメソッドを呼び出す
-		var jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        var jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-        jo.Call("startRecognition");
-
         SceneManager.LoadScene("MainScene");
+
+        // java側の音声認識を開始するメソッドを呼び出す
+
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        context.Call("startRecognition");
+
     }
 }
