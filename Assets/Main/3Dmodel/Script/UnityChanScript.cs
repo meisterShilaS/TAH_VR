@@ -30,11 +30,7 @@ public class UnityChanScript : MonoBehaviour {
             }
             VoiceString = "";
         }
-        else
-        {
-            this.animator.SetBool("Pause1", false);
-        }
-        if (VoiceString == "じゃあね")
+        else if (VoiceString == "じゃあね")
         {
             this.animator.SetBool("Pause2", true);
             if (this.animator.GetBool("Pause2"))
@@ -45,8 +41,21 @@ public class UnityChanScript : MonoBehaviour {
         }
         else
         {
+            if (VoiceString != "") {
+                dc.Talk(VoiceString, onReply);
+                VoiceString = "";
+            }
+
+            this.animator.SetBool("Pause1", false);
             this.animator.SetBool("Pause2", false);
         }
+    }
+
+    private void onReply(string reply, string reply_yomi)
+    {
+        synth.speak(reply_yomi);
+        Debug.Log("reply: " + reply);
+        Debug.Log("reply_yomi: " + reply_yomi);
     }
 
     public DialogContext GetDialogContext() {
