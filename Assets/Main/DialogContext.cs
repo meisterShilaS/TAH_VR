@@ -33,6 +33,8 @@ public class DialogContext {
     }
     public enum Character { Default, 関西弁, 赤ちゃん }
 
+    public delegate void reply(string reply, string reply_yomi);
+
     private const string API_KEY =
         "59522f317336726d514662495a62434170633768464f32636d31496161615a766431434a44767045707443";
     private const string API_URL =
@@ -55,7 +57,7 @@ public class DialogContext {
     public string nickname { get; set; }
     public string nickname_yomi { get; set; }
     public Sex? sex {
-        get { return (Sex)(sex_m!=null? System.Enum.Parse(typeof(Sex), sex_m, true)) : null; }
+        get { return (Sex)(sex_m!=null? System.Enum.Parse(typeof(Sex), sex_m, true) : null); }
         set { sex_m = value!=null? value.ToString() : null; }
     }
     public Bloodtype? bloodtype {
@@ -126,7 +128,6 @@ public class DialogContext {
         mb_m = mono;
     }
 
-    public delegate void reply(string reply, string reply_yomi);
     public void Talk(string message, reply callback) {
         mb_m.StartCoroutine(TalkCoroutine(message, callback));
     }
@@ -150,6 +151,8 @@ public class DialogContext {
         ResponseJSON json = JsonUtility.FromJson<ResponseJSON>(response);
         mode_m = json.mode;
         context_m = json.context;
+
+        Debug.Log(context_m);
 
         callback(json.utt, json.yomi);
     }

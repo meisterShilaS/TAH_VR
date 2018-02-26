@@ -8,6 +8,7 @@ public class UnityChanScript : MonoBehaviour {
     private Animator animator;
 
     private SpeechSynthesizer synth;
+    private DialogContext dc;
 
     private string VoiceString="";
 
@@ -15,6 +16,7 @@ public class UnityChanScript : MonoBehaviour {
 	void Start () {
         this.animator = GetComponent<Animator>();
         synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this);
+        dc = new DialogContext(this);
 	}
 	
 	// Update is called once per frame
@@ -24,7 +26,7 @@ public class UnityChanScript : MonoBehaviour {
             this.animator.SetBool("Pause1", true);
             if (this.animator.GetBool("Pause1"))
             {
-                synth.speak(new SpeechSynthesizer.SpeechInfo("ただいまマイクのテスト中", pitch: 1.5));
+                synth.speak("ただいまマイクのテスト中", pitch: 1.5);
             }
             VoiceString = "";
         }
@@ -37,7 +39,7 @@ public class UnityChanScript : MonoBehaviour {
             this.animator.SetBool("Pause2", true);
             if (this.animator.GetBool("Pause2"))
             {
-                synth.speak(new SpeechSynthesizer.SpeechInfo("声の高さも自由自在", pitch: 1.0));
+                synth.speak("声の高さも自由自在", pitch: 1.0);
             }
             VoiceString = "";
         }
@@ -47,6 +49,13 @@ public class UnityChanScript : MonoBehaviour {
         }
     }
 
+    public DialogContext GetDialogContext() {
+        return dc;
+    }
+
+    public SpeechSynthesizer GetSpeechSynthesizer() {
+        return synth;
+    }
 
     public void SetVoiceStr(string str)
     {

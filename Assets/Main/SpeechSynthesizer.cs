@@ -99,6 +99,15 @@ public class SpeechSynthesizer {
         }
     }
 
+    public void speak(  string text,
+                        double pitch  = 1.0,
+                        double range  = 1.0,
+                        double rate   = 1.0,
+                        double volume = 1.0 )
+    {
+        speak(new SpeechInfo(text, pitch, range, rate, volume));
+    }
+
     public void speak(SpeechInfo si) {
         mb.StartCoroutine(speakCoroutine(si));
     }
