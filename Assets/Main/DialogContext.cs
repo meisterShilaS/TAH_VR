@@ -122,11 +122,16 @@ public class DialogContext {
         }
     }
 
-    public DialogContext(MonoBehaviour caller) {
-        mb_m = caller;
+    public DialogContext(MonoBehaviour mono) {
+        mb_m = mono;
     }
 
-    public IEnumerable TalkCoroutine(string message) {
+    public delegate void reply(string reply, string reply_yomi);
+    public void Talk(string message, reply callback) {
+        mb_m.StartCoroutine(TalkCoroutine(message, callback));
+    }
+
+    private IEnumerator TalkCoroutine(string message, reply callback) {
         var data = System.Text.Encoding.UTF8.GetBytes(GenerateJSON(message));
 
         var headers = new Dictionary<string, string>() {
@@ -146,7 +151,7 @@ public class DialogContext {
         mode_m = json.mode;
         context_m = json.context;
 
-        Reply(json.utt, json.yomi);
+        callback(json.utt, json.yomi);
     }
 
     private string GenerateJSON(string message) {
