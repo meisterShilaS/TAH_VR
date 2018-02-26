@@ -97,7 +97,7 @@ public class SpeechSynthesizer {
             this.rate   = rate;
             this.volume = volume;
         }
-    };
+    }
 
     public void speak(SpeechInfo si) {
         mb.StartCoroutine(speakCoroutine(si));
