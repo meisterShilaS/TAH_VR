@@ -11,11 +11,17 @@ public class UnityChanScript : MonoBehaviour {
 
     private string VoiceString="";
 
-	// Use this for initialization
-	void Start () {
+    private AndroidJavaClass unityPlayer;
+    private AndroidJavaObject context;
+
+    // Use this for initialization
+    void Start () {
         this.animator = GetComponent<Animator>();
         synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this);
-	}
+
+        unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -27,6 +33,8 @@ public class UnityChanScript : MonoBehaviour {
                 synth.speak(new SpeechSynthesizer.SpeechInfo("ただいまマイクのテスト中", pitch: 1.5));
             }
             VoiceString = "";
+            context.Call("endMuteSound");
+            context.Call("startRecognition");       //再び音声認識を開始
         }
         else
         {
@@ -40,6 +48,8 @@ public class UnityChanScript : MonoBehaviour {
                 synth.speak(new SpeechSynthesizer.SpeechInfo("声の高さも自由自在", pitch: 1.0));
             }
             VoiceString = "";
+            context.Call("endMuteSound");
+            context.Call("startRecognition");       //再び音声認識を開始
         }
         else
         {
@@ -51,6 +61,11 @@ public class UnityChanScript : MonoBehaviour {
     public void SetVoiceStr(string str)
     {
         this.VoiceString = str;
+    }
+
+    public void speakWeather(string str)
+    {
+
     }
 
 }

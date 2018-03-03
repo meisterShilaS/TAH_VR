@@ -27,6 +27,7 @@ public class VoiceRecognitionScript : MonoBehaviour
         //androidstudio側のクラスを参照できるようにする
         unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
     }
 
 
@@ -37,19 +38,15 @@ public class VoiceRecognitionScript : MonoBehaviour
         //天気の情報を求められた場合
         if (str == "今日の天気を教えて")
         {
-            context.Call("searchWeatherMethod");
+            context.Call("startSearchWeather",0);       //現在の天気を調べるようにしてる
         }
         script.SetVoiceStr(str);        //unitychanのスクリプトに音声認識文字列を渡す
-        text.text = "音声：" + str + "\n";
         context.Call("startRecognition");       //再び音声認識を開始
 
     }
 
-
-    //天気の情報が返ってくる関数
     public void onCallBackWeather(string str)
     {
-
-        text.text = "天気：" + str + "\n";
+        text.text = str;
     }
 }
