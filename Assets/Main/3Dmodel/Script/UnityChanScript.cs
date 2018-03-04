@@ -56,6 +56,8 @@ public class UnityChanScript : MonoBehaviour {
             if (VoiceString != "") {
                 dc.Talk(VoiceString, onReply);
                 VoiceString = "";
+                context.Call("endMuteSound");
+                context.Call("startRecognition");
             }
 
             this.animator.SetBool("Pause1", false);
@@ -68,14 +70,6 @@ public class UnityChanScript : MonoBehaviour {
         synth.speak(reply_yomi);
         Debug.Log("reply: " + reply);
         Debug.Log("reply_yomi: " + reply_yomi);
-    }
-
-    public DialogContext GetDialogContext() {
-        return dc;
-    }
-
-    public SpeechSynthesizer GetSpeechSynthesizer() {
-        return synth;
     }
 
     public void SetVoiceStr(string str)
