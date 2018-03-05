@@ -178,13 +178,13 @@ public class DialogContext {
     private string JSONObject(string key, string value) {
         return '"' + key + "\":\"" + value + '"';
     }
-}
 
-[System.Serializable]
-class ResponseJSON {
-    public string utt;
-    public string yomi;
-    public string mode;
-    public int da;
-    public string context;
+    [System.Serializable]
+    class ResponseJSON {
+        public string utt;
+        public string yomi;
+        public string mode;
+        public int da;
+        public string context;
+    }
 }
