@@ -4,7 +4,7 @@ using UnityEngine;
 using MiniJSON;
 
 public class SentenceUnderstanding {
-    public delegate void result(string commandName, Dictionary<string,string> slots);
+    public delegate void result(string commandName, Dictionary<string,SlotValue> slots);
 
     private const string API_KEY =
         "59522f317336726d514662495a62434170633768464f32636d31496161615a766431434a44767045707443";
@@ -41,12 +41,19 @@ public class SentenceUnderstanding {
         string response = System.Text.Encoding.UTF8.GetString(www.bytes);
         var dialogStatus = JsonNode.Parse(response)["dialogStatus"];
 
-        var slots = new Dictionary<string, string>();
+        var slots = new Dictionary<string, SlotValue>();
         foreach(var slot in dialogStatus["slotStatus"]) {
-            slots.Add(slot["slotName"].Get<string>(), slot["slotValue"].Get<string>());
+            var sv = new SlotValue();
+            sv.slotValue = slot["slotValue"].Get<string>();
+            sv.valueType = slot["valueType"].Get<string>();
+            slots.Add(slot["slotName"].Get<string>(), sv);
         }
 
         callback(dialogStatus["command"]["commandName"].Get<string>(), slots);
     }
-}
 
+    public class SlotValue {
+        public string slotValue;
+        public string valueType;
+    }
+}
