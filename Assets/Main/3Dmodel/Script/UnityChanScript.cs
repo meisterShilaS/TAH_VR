@@ -10,8 +10,6 @@ public class UnityChanScript : MonoBehaviour {
     private SpeechSynthesizer synth;
     private DialogContext dc;
 
-    private string VoiceString="";
-
     private AndroidJavaClass unityPlayer;
     private AndroidJavaObject context;
 
@@ -22,6 +20,7 @@ public class UnityChanScript : MonoBehaviour {
 
         dc = new DialogContext(this);
 
+        //androidstudio側のクラスを参照できるようにする
         unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
     }
@@ -29,7 +28,7 @@ public class UnityChanScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (VoiceString=="こんにちは")
+        /* if (VoiceString=="こんにちは")
         {
             this.animator.SetBool("Pause1", true);
             if (this.animator.GetBool("Pause1"))
@@ -62,9 +61,39 @@ public class UnityChanScript : MonoBehaviour {
 
             this.animator.SetBool("Pause1", false);
             this.animator.SetBool("Pause2", false);
-        }
+        } */
     }
 
+    // 発言の分類が完了したときに呼ばれる
+    public void onCompleteClassification(
+        string utterance,   // 発言文字列
+        string commandName, // 発言が何らかの指令だったとき，指令のおおまかな分類
+        Dictionary<string, SentenceUnderstanding.SlotValue> slots // 指令のパラメータ
+    ){
+        if (commandName == "天気") { // 天気を教えてという指令だったとき
+            if (slots["searchArea"].slotValue != "none" ||
+                slots["hereArround"].slotValue != "none")
+            {
+                synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
+            }
+            else {
+                int day = 0;
+                string date = slots["date"].slotValue;
+                if (date == "今日") day = 1;
+                else if(date == "明日") day = 2;
+                else if(date == "明後日") day = 3;
+
+                context.Call("startSearchWeather", day);
+            }
+        }
+        else { // その他のとき，雑談として扱う
+            dc.Talk(utterance, onReply);
+        }
+        context.Call("endMuteSound");
+        context.Call("startRecognition");   //再び音声認識を開始
+    }
+
+    // 雑談対話の結果が返ってきたとき呼ばれる
     private void onReply(string reply, string reply_yomi)
     {
         synth.speak(reply_yomi);
@@ -72,14 +101,8 @@ public class UnityChanScript : MonoBehaviour {
         Debug.Log("reply_yomi: " + reply_yomi);
     }
 
-    public void SetVoiceStr(string str)
-    {
-        this.VoiceString = str;
-    }
-
     public void speakWeather(string str)
     {
-
+        synth.speak(str);
     }
-
 }

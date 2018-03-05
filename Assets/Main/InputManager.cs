@@ -6,19 +6,19 @@ using System;
 
 public class InputManager : MonoBehaviour {
     private InputField inputField;
-    private UnityChanScript script;
+    private VoiceRecognitionScript script;
 
 	// Use this for initialization
 	void Start () {
 		inputField = GetComponent<InputField>();
         InitInputField();
 
-        script = GameObject.Find("unitychan").GetComponent<UnityChanScript>();
+        script = GameObject.Find("VoiceRecognitionObject").GetComponent<VoiceRecognitionScript>();
 	}
 	
 	// Update is called once per frame
 	public void onEnter () {
-        script.SetVoiceStr(inputField.text);
+        script.onCallBackString(inputField.text);
         InitInputField();
 	}
 
