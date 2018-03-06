@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class callUnityChan : MonoBehaviour
+public class FollowingUnityChan : MonoBehaviour
 {
 
     private Vector3 position;
     private Vector3 target;
     private Animator animator;
-    private bool pointer;
-    private float time;
-    private bool notMV;
+    private int putKey;
 
 
     private void Start()
@@ -19,35 +17,35 @@ public class callUnityChan : MonoBehaviour
         target.y = 0;
         target.z = -1.64f;
         this.animator = GetComponent<Animator>();
-        pointer = true;
-        notMV = true;
-        time = 0;
+        putKey = 0;             //0:押してない||bを押したとき　1:aを押したとき
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (pointer&&notMV==false) {
-            time += Time.deltaTime;
-
-            if (time >= 2)
-            {
-                notMV = true;
-                this.animator.SetBool("Run_R", false);
-            }
-        }
-        else if(pointer==false&&notMV==false)
+        if (Input.GetKeyDown("a"))
         {
-            Debug.Log("raycast");
+            putKey = 1;
+        }
+
+        if (Input.GetKeyDown("b"))
+        {
+            putKey = 0;
+        }
+
+
+        if(putKey==1)
+        {
             Ray ray = new Ray(Camera.main.transform.position,
                 Camera.main.transform.rotation * Vector3.forward);
+
+            this.animator.SetBool("Run_R", true);
 
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.gameObject.name == "Tube")
                 {
-                    this.animator.SetBool("Run_R", true);
                     position.x = hit.point.x;
                     position.y = 0;
                     position.z = hit.point.z;
@@ -57,20 +55,19 @@ public class callUnityChan : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            this.animator.SetBool("Run_R", false);
+        }
     }
 
     public void exitPointer()
     {
-        pointer = false;
-        notMV = false;
-        time = 0;
-        Debug.Log("exitPointer");
+        
     }
 
     public void enterPointer()
     {
-        pointer = true;
-        this.animator.SetBool("Run_R", false);
-        Debug.Log("enterPointer");
+        
     }
 }
