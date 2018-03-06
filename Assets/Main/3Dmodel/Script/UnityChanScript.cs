@@ -28,6 +28,8 @@ public class UnityChanScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // 呼びかけと応答のルーチンはonCompleteClassificationに移動しました
+
         /* if (VoiceString=="こんにちは")
         {
             this.animator.SetBool("Pause1", true);
@@ -70,24 +72,27 @@ public class UnityChanScript : MonoBehaviour {
         string commandName, // 発言が何らかの指令だったとき，指令のおおまかな分類
         Dictionary<string, SentenceUnderstanding.SlotValue> slots // 指令のパラメータ
     ){
-        if (commandName == "天気") { // 天気を教えてという指令だったとき
-            if (slots["searchArea"].slotValue != "none" ||
-                slots["hereArround"].slotValue != "none")
-            {
-                synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
-            }
-            else {
-                int day = 0;
-                string date = slots["date"].slotValue;
-                if (date == "今日") day = 1;
-                else if(date == "明日") day = 2;
-                else if(date == "明後日") day = 3;
+        switch (commandName) {
+            case "天気":  // 天気を教えてという指令だったとき
+                if (slots["searchArea"].slotValue != "none" ||
+                    slots["hereArround"].slotValue != "none")
+                {
+                    synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
+                }
+                else {
+                    int day = 0;
+                    string date = slots["date"].slotValue;
+                    if (date == "今日") day = 1;
+                    else if(date == "明日") day = 2;
+                    else if(date == "明後日") day = 3;
 
-                context.Call("startSearchWeather", day);
-            }
-        }
-        else { // その他のとき，雑談として扱う
-            dc.Talk(utterance, onReply);
+                    context.Call("startSearchWeather", day);
+                }
+                break;
+            
+            default:    // その他のとき，雑談として扱う
+                dc.Talk(utterance, onReply);
+                break;
         }
         context.Call("endMuteSound");
         context.Call("startRecognition");   //再び音声認識を開始
