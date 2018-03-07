@@ -20,6 +20,7 @@ public class FollowingUnityChan : MonoBehaviour
     private bool lockOn = false;
     private float theta;
 
+    private bool followingFlag = false;
 
     void Start()
     {
@@ -31,12 +32,14 @@ public class FollowingUnityChan : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("a"))
+        if (followingFlag)
         {
             action = 1;
             startTime = Time.time;
             lockOn = false;
             startTheta = searchTheta(this.transform.position);
+
+            followingFlag = false;
         }
 
 
@@ -56,6 +59,10 @@ public class FollowingUnityChan : MonoBehaviour
             this.animator.SetBool("Run_R", false);
             action = 0;
         }
+    }
+
+    public void follow() {
+        followingFlag = true;
     }
 
 

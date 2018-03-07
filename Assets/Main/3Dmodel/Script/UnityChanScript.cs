@@ -13,6 +13,9 @@ public class UnityChanScript : MonoBehaviour {
         "今日は何日", "今日は何日？",
         "今日の日付は", "今日の日付は？"
     };
+    static List<string> followPattern = new List<string> {
+        "こっちこっち"
+    };
 
     private Animator animator;
 
@@ -21,6 +24,8 @@ public class UnityChanScript : MonoBehaviour {
 
     private AndroidJavaClass unityPlayer;
     private AndroidJavaObject context;
+
+    private FollowingUnityChan followingScript;
 
     // Use this for initialization
     void Start () {
@@ -32,6 +37,8 @@ public class UnityChanScript : MonoBehaviour {
         //androidstudio側のクラスを参照できるようにする
         unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        
+        followingScript = GameObject.Find("unitychan").GetComponent<FollowingUnityChan>();
     }
 
 	
@@ -81,34 +88,33 @@ public class UnityChanScript : MonoBehaviour {
         string commandName, // 発言が何らかの指令だったとき，指令のおおまかな分類
         Dictionary<string, SentenceUnderstanding.SlotValue> slots // 指令のパラメータ
     ){
-        switch (commandName) {
-            case "天気":  // 天気を教えてという指令だったとき
-                if (slots["searchArea"].slotValue != "none" ||
-                    slots["hereArround"].slotValue != "none")
-                {
-                    synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
-                }
-                else {
-                    int day = 0;
-                    string date = slots["date"].slotValue;
-                    if (date == "今日") day = 1;
-                    else if(date == "明日") day = 2;
-                    else if(date == "明後日") day = 3;
+        if (commandName == "天気") {  // 天気を教えてという指令だったとき
+            if (slots["searchArea"].slotValue != "none" ||
+                slots["hereArround"].slotValue != "none")
+            {
+                synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
+            }
+            else {
+                int day = 0;
+                string date = slots["date"].slotValue;
+                if (date == "今日") day = 1;
+                else if(date == "明日") day = 2;
+                else if(date == "明後日") day = 3;
 
-                    context.Call("startSearchWeather", day);
-                }
-                break;
-            default:
-                if (askTimePattern.Contains(utterance)) {
-                    synth.speak(context.Call<string>("getNowTime"));
-                }
-                else if (askDatePattern.Contains(utterance)) {
-                    synth.speak(context.Call<string>("getNowDate"));
-                }
-                else {
-                    dc.Talk(utterance, onReply);
-                }
-                break;
+                context.Call("startSearchWeather", day);
+            }
+        }
+        else if (followPattern.Contains(utterance)) {
+            followingScript.follow();
+        }
+        else if (askTimePattern.Contains(utterance)) {
+            synth.speak(context.Call<string>("getNowTime"));
+        }
+        else if (askDatePattern.Contains(utterance)) {
+            synth.speak(context.Call<string>("getNowDate"));
+        }
+        else {
+            dc.Talk(utterance, onReply);
         }
         context.Call("endMuteSound");
         context.Call("startRecognition");   //再び音声認識を開始
