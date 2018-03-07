@@ -8,66 +8,107 @@ public class FollowingUnityChan : MonoBehaviour
     private Vector3 position;
     private Vector3 target;
     private Animator animator;
-    private int putKey;
+
+    private int action=0;
+    private float xPoint=0;
+    private float zPoint=0;
+
+    private float speed = 1f;
+    private float radius=1.64f;
+    private float startTime;
+    private float startTheta;
+    private bool lockOn = false;
 
 
-    private void Start()
+    void Start()
     {
         target.x = 0;
         target.y = 0;
-        target.z = -1.64f;
+        target.z = 0;
         this.animator = GetComponent<Animator>();
-        putKey = 0;             //0:押してない||bを押したとき　1:aを押したとき
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown("a"))
         {
-            putKey = 1;
+            action = 1;
+            startTime = Time.time;
+            lockOn = false;
+            startTheta = searchTheta(this.transform.position);
+            Debug.Log(startTheta);
         }
 
-        if (Input.GetKeyDown("b"))
+
+
+        if (action == 1&&lockOn==false)
         {
-            putKey = 0;
-        }
-
-
-        if(putKey==1)
-        {
-            Ray ray = new Ray(Camera.main.transform.position,
-                Camera.main.transform.rotation * Vector3.forward);
-
             this.animator.SetBool("Run_R", true);
-
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.gameObject.name == "Tube")
-                {
-                    position.x = hit.point.x;
-                    position.y = 0;
-                    position.z = hit.point.z;
-                    this.transform.position = position;
-                    this.transform.LookAt(target);
-
-                }
-            }
+            position.x= Mathf.Cos(Time.time-startTime+startTheta) * radius;
+            position.y = 0;
+            position.z = Mathf.Sin(Time.time-startTime+startTheta) * radius;
+            this.transform.position = position; ;
+            this.transform.LookAt(target);
         }
-        else
+        else if(lockOn)
         {
             this.animator.SetBool("Run_R", false);
+            action = 0;
         }
     }
+
 
     public void exitPointer()
     {
-        
+        lockOn = true;
     }
+
 
     public void enterPointer()
     {
-        
+        lockOn = false;
+    }
+
+
+    //この関数をうまく使えば追従する動きを作れる
+    //今見ている視線の座標を取得する関数
+    //x軸とz軸を入手できる
+    //このクラスのxPointとzPointに取得データが入る
+    public void getEyePoint()
+    {
+        Ray ray = new Ray(Camera.main.transform.position,
+                Camera.main.transform.rotation * Vector3.forward);
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+
+
+            if (hit.collider.gameObject.name == "Tube")
+            {
+                xPoint = hit.point.x;
+                zPoint = hit.point.x;
+            }
+        }
+    }
+
+
+    //角度を求める関数
+    //引数は求めるもののVector3
+    //戻り値は度
+    public float searchTheta(Vector3 vec)
+    {
+        float theta; 
+
+        if (vec.x == 0)
+        {
+            theta = 90;
+        }
+        else
+        {
+            theta = Mathf.Atan(vec.z / vec.x) * Mathf.Rad2Deg;
+        }
+
+        return theta;
     }
 }
