@@ -29,7 +29,6 @@ public class VoiceRecognitionScript : MonoBehaviour
     //返ってきた文字列をおおまかに分類したものをunityちゃんのスクリプトに渡す
     public void onCallBackString(string str)
     {
-        throw new Exception("ああああああ");
         SentenceUnderstanding.Input(str, script.onCompleteClassification, this);
     }
 
