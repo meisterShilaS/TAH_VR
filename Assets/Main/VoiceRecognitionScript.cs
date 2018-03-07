@@ -22,6 +22,11 @@ public class VoiceRecognitionScript : MonoBehaviour
         unitychan = GameObject.Find("unitychan");
         //unitychanの中にあるUnityChanScriptを取得して変数に格納する
         script = unitychan.GetComponent<UnityChanScript>();
+
+        unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        context.Call("startRecognition");
     }
 
 
