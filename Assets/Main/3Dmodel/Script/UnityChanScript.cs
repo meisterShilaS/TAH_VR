@@ -33,12 +33,13 @@ public class UnityChanScript : MonoBehaviour {
         synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this);
 
         dc = new DialogContext(this);
+        
+        followingScript = GameObject.Find("unitychan").GetComponent<FollowingUnityChan>();
+        Debug.Log(followingScript);
 
         //androidstudio側のクラスを参照できるようにする
         unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        
-        followingScript = GameObject.Find("unitychan").GetComponent<FollowingUnityChan>();
     }
 
 	

@@ -22,6 +22,10 @@ public class InputManager : MonoBehaviour {
         InitInputField();
 	}
 
+    public void onClick() {
+        GameObject.Find("VoiceRecognitionObject").GetComponent<VoiceRecognitionScript>().onCallBackString("こっちこっち");
+    }
+
     void InitInputField() {
         inputField.text = "";
         inputField.ActivateInputField();
