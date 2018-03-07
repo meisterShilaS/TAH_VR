@@ -117,7 +117,6 @@ public class UnityChanScript : MonoBehaviour {
         else {
             dc.Talk(utterance, onReply);
         }
-        context.Call("endMuteSound");
         context.Call("startRecognition");   //再び音声認識を開始
     }
 
