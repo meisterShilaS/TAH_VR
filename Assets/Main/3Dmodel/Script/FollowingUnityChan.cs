@@ -18,6 +18,7 @@ public class FollowingUnityChan : MonoBehaviour
     private float startTime;
     private float startTheta;
     private bool lockOn = false;
+    private float theta;
 
 
     void Start()
@@ -36,7 +37,6 @@ public class FollowingUnityChan : MonoBehaviour
             startTime = Time.time;
             lockOn = false;
             startTheta = searchTheta(this.transform.position);
-            Debug.Log(startTheta);
         }
 
 
@@ -44,10 +44,11 @@ public class FollowingUnityChan : MonoBehaviour
         if (action == 1&&lockOn==false)
         {
             this.animator.SetBool("Run_R", true);
+
             position.x= Mathf.Cos(Time.time-startTime+startTheta) * radius;
             position.y = 0;
             position.z = Mathf.Sin(Time.time-startTime+startTheta) * radius;
-            this.transform.position = position; ;
+            this.transform.position = position;
             this.transform.LookAt(target);
         }
         else if(lockOn)
@@ -95,19 +96,30 @@ public class FollowingUnityChan : MonoBehaviour
 
     //角度を求める関数
     //引数は求めるもののVector3
-    //戻り値は度
+    //戻り値はラジアン
+    //unityちゃんの位置に合わせて作ったから他の座標で使用する場合，コードを変えないといけない
     public float searchTheta(Vector3 vec)
     {
-        float theta; 
+        float theta;
 
         if (vec.x == 0)
         {
-            theta = 90;
+            theta = 90*Mathf.Deg2Rad;
+            if (vec.z < 0f)
+            {
+                theta = theta +180* Mathf.Deg2Rad;
+            }
         }
         else
         {
-            theta = Mathf.Atan(vec.z / vec.x) * Mathf.Rad2Deg;
+            theta = Mathf.Atan(vec.z / vec.x);
+            if (vec.x < 0f)
+            {
+                theta = theta + 180 * Mathf.Deg2Rad;
+            }
         }
+
+        Debug.Log(theta);
 
         return theta;
     }
