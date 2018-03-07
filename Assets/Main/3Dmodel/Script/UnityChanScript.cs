@@ -3,7 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnityChanScript : MonoBehaviour {
-
+    static List<string> askTimePattern = new List<string> {
+        "今何時", "今何時？",
+        "今の時間は", "今の時間は？",
+        "今の時間を教えて", "今の時間を教えて？",
+        "今は何時", "今は何時？"
+    };
+    static List<string> askDatePattern = new List<string> {
+        "今日は何日", "今日は何日？",
+        "今日の日付は", "今日の日付は？"
+    };
 
     private Animator animator;
 
@@ -89,9 +98,16 @@ public class UnityChanScript : MonoBehaviour {
                     context.Call("startSearchWeather", day);
                 }
                 break;
-            
-            default:    // その他のとき，雑談として扱う
-                dc.Talk(utterance, onReply);
+            default:
+                if (askTimePattern.Contains(utterance)) {
+                    synth.speak(context.Call<string>("getNowTime"));
+                }
+                else if (askDatePattern.Contains(utterance)) {
+                    synth.speak(context.Call<string>("getNowDate"));
+                }
+                else {
+                    dc.Talk(utterance, onReply);
+                }
                 break;
         }
         context.Call("endMuteSound");
