@@ -192,4 +192,8 @@ public class UnityChanScript : MonoBehaviour {
 		    }
         }
     }
+
+    public SpeechSynthesizer GetSpeaker() {
+        return synth;
+    }
 }

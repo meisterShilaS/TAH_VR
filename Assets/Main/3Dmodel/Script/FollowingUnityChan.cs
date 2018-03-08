@@ -70,7 +70,7 @@ public class FollowingUnityChan : MonoBehaviour
             lookTime+= Time.deltaTime;
             if (lookTime >= 5)
             {
-                Debug.Log("あんまり見ないで");
+                GetComponent<UnityChanScript>().GetSpeaker().speak("そんなじろじろみないで");
                 lookTime = 0;
             }
 
@@ -81,7 +81,7 @@ public class FollowingUnityChan : MonoBehaviour
             notLookTime+= Time.deltaTime;
             if (notLookTime >= 10)
             {
-                Debug.Log("なにしてるの？");
+                GetComponent<UnityChanScript>().GetSpeaker().speak("なにしてるの？");
                 notLookTime = 0;
             }
         }
