@@ -62,6 +62,7 @@ public class FollowingUnityChan : MonoBehaviour
         {
             this.animator.SetBool("Run_R", false);
             action = 0;
+            GetComponent<UnityChanScript>().startRecognition();
         }
 
         /*

@@ -32,7 +32,7 @@ public class UnityChanScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.animator = GetComponent<Animator>();
-        synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this, ()=>context.Call("startRecognition"));
+        synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this, startRecognition);
 
         dc = new DialogContext(this);
         
@@ -195,5 +195,9 @@ public class UnityChanScript : MonoBehaviour {
 
     public SpeechSynthesizer GetSpeaker() {
         return synth;
+    }
+
+    public void startRecognition() {
+        context.Call("startRecognition");
     }
 }
