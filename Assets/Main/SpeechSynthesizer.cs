@@ -123,7 +123,7 @@ public class SpeechSynthesizer {
         audioSource.Play();
         do {
             yield return new WaitForFixedUpdate();
-        } while (!audioSource.isPlaying);
+        } while (audioSource.isPlaying);
         callback();
     }
 
