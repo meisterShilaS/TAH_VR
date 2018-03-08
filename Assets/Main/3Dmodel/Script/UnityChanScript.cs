@@ -30,7 +30,7 @@ public class UnityChanScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.animator = GetComponent<Animator>();
-        synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this);
+        synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this, ()=>context.Call("startRecognition"));
 
         dc = new DialogContext(this);
         
@@ -117,7 +117,6 @@ public class UnityChanScript : MonoBehaviour {
         else {
             dc.Talk(utterance, onReply);
         }
-        context.Call("startRecognition");   //再び音声認識を開始
     }
 
     // 雑談対話の結果が返ってきたとき呼ばれる
