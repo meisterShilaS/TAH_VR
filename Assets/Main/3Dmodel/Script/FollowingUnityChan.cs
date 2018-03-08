@@ -13,7 +13,6 @@ public class FollowingUnityChan : MonoBehaviour
     private float xPoint=0;
     private float zPoint=0;
 
-    private float speed = 1f;
     private float radius=1.64f;
     private float startTime;
     private float startTheta;
@@ -21,6 +20,11 @@ public class FollowingUnityChan : MonoBehaviour
     private float theta;
 
     private bool followingFlag = false;
+
+    private bool looking=true;
+    private float lookTime = 0;
+    private float notLookTime = 0;
+
 
     void Start()
     {
@@ -43,7 +47,7 @@ public class FollowingUnityChan : MonoBehaviour
         }
 
 
-
+        //現在地までunityちゃんが来る処理
         if (action == 1&&lockOn==false)
         {
             this.animator.SetBool("Run_R", true);
@@ -59,6 +63,28 @@ public class FollowingUnityChan : MonoBehaviour
             this.animator.SetBool("Run_R", false);
             action = 0;
         }
+
+        //unityちゃんを見続けたときの処理
+        if (looking)
+        {
+            lookTime+= Time.deltaTime;
+            if (lookTime >= 180)
+            {
+                Debug.Log("見すぎ");
+                lookTime = 0;
+            }
+
+        }
+        //unityちゃんを見ていない時間が長いときの処理
+        else
+        {
+            notLookTime+= Time.deltaTime;
+            if (notLookTime >= 180)
+            {
+                Debug.Log("なにしてるの？");
+                notLookTime = 0;
+            }
+        }
     }
 
     public void follow() {
@@ -66,15 +92,24 @@ public class FollowingUnityChan : MonoBehaviour
     }
 
 
-    public void exitPointer()
+    //ポインタがunityちゃんに乗った時の処理
+    public void enterPointer()
     {
-        lockOn = true;
+        Debug.Log("enter");
+        lockOn = false;
+        looking = true;
+        notLookTime = 0;
     }
 
 
-    public void enterPointer()
+    //ポインタがunityちゃんから出たときの処理
+    public void exitPointer()
     {
-        lockOn = false;
+        Debug.Log("exit");
+        lockOn = true;
+        looking = false;
+        lookTime = 0;
+        
     }
 
 
