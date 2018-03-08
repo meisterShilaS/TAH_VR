@@ -37,9 +37,8 @@ public class VoiceRecognitionScript : MonoBehaviour
         SentenceUnderstanding.Input(str, script.onCompleteClassification, this);
     }
 
-    public void onCallBackWeather(string str, int day)
+    public void onCallBackWeather(string str)
     {
-        if (str == null) context.Call("startSearchWeather", day);
-        else script.speakWeather(str);
+        script.speakWeather(str);
     }
 }
