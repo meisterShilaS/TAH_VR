@@ -31,6 +31,8 @@ public class SpeechSynthesizer {
         koutarou, maki, nanako, osamu, sumire
     };
 
+    public delegate void onFinishSpeaking();
+
     // APIに必要なキー
     private const string API_KEY =
         "59522f317336726d514662495a62434170633768464f32636d31496161615a766431434a44767045707443";
@@ -56,11 +58,14 @@ public class SpeechSynthesizer {
     private readonly AudioSource audioSource; // 再生用のAudioSource
 
     private byte[] rawSoundData; // APIから取得した音声データ
+
+    private onFinishSpeaking callback;
     
-    public SpeechSynthesizer(Voice voice, MonoBehaviour caller) {
+    public SpeechSynthesizer(Voice voice, MonoBehaviour caller, onFinishSpeaking callback) {
         voiceName = voice.ToString();
         mb = caller;
         audioSource = mb.gameObject.AddComponent<AudioSource>();
+        this.callback = callback;
     }
 
     public class SpeechInfo {
@@ -116,6 +121,10 @@ public class SpeechSynthesizer {
         yield return getRawSoundData(si);
         audioSource.clip = convertAudioClip();
         audioSource.Play();
+        do {
+            yield return new WaitForFixedUpdate();
+        } while (audioSource.isPlaying);
+        callback();
     }
 
     // APIのサーバに送るSSML(音声合成用の記述言語)を生成
