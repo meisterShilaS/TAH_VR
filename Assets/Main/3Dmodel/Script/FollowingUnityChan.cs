@@ -13,6 +13,7 @@ public class FollowingUnityChan : MonoBehaviour
     private float xPoint=0;
     private float zPoint=0;
 
+    private float speed = 1f;
     private float radius=1.64f;
     private float startTime;
     private float startTheta;
@@ -24,7 +25,6 @@ public class FollowingUnityChan : MonoBehaviour
     private bool looking=true;
     private float lookTime = 0;
     private float notLookTime = 0;
-
 
     void Start()
     {
@@ -91,7 +91,6 @@ public class FollowingUnityChan : MonoBehaviour
         followingFlag = true;
     }
 
-
     //ポインタがunityちゃんに乗った時の処理
     public void enterPointer()
     {
@@ -100,8 +99,7 @@ public class FollowingUnityChan : MonoBehaviour
         looking = true;
         notLookTime = 0;
     }
-
-
+    
     //ポインタがunityちゃんから出たときの処理
     public void exitPointer()
     {
@@ -109,7 +107,6 @@ public class FollowingUnityChan : MonoBehaviour
         lockOn = true;
         looking = false;
         lookTime = 0;
-        
     }
 
 

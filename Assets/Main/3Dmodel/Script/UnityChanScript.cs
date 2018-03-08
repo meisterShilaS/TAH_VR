@@ -44,12 +44,66 @@ public class UnityChanScript : MonoBehaviour {
         context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
     }
 
-	
+
 	// Update is called once per frame
 	void Update () {
-        // 呼びかけと応答のルーチンはonCompleteClassificationに移動しました
+		//試すよう 条件に合うモーション下に
+		//候補 天気〇wait02　天気×lose00,refresh00 時間〇wait01　日付〇wait01,wait03　　
 
-        /* if (VoiceString=="こんにちは")
+		/*
+		if (Input.GetKey ("1")) {
+			this.animator.SetBool ("try", true);
+		} else {
+			this.animator.SetBool ("try", false);
+		}
+		*/
+
+		/*
+		//一定時間経過でランダムなモーションをおこす
+		//random
+		Random rnd = new System.Random();	//インスタンスを生成
+		int ramresult = rnd.Next(5);		//0~4の乱数取得
+		if (ramresult==0) {
+			if (ramresult == 0) {
+				this.animator.SetBool ("", true);
+				ramresult = 10;
+			} else {
+				this.animator.SetBool("",false);
+			}
+		} else if (ramresult==1) {
+			if (ramresult == 0) {
+				this.animator.SetBool ("", true);
+				ramresult = 10;
+			} else {
+				this.animator.SetBool("",false);
+			}
+		} else if (ramresult==2) {
+			if (ramresult == 0) {
+				this.animator.SetBool ("", true);
+				ramresult = 10;
+			} else {
+				this.animator.SetBool("",false);
+			}
+		} else if (ramresult==3) {
+			if (ramresult == 0) {
+				this.animator.SetBool ("", true);
+				ramresult = 10;
+			} else {
+				this.animator.SetBool("",false);
+			}
+		} else if (ramresult==4) {
+			if (ramresult == 0) {
+				this.animator.SetBool ("", true);
+				ramresult = 10;
+			} else {
+				this.animator.SetBool("",false);
+			}
+		}
+		*/
+
+		// 呼びかけと応答のルーチンはonCompleteClassificationに移動しました
+
+		/* if (VoiceString=="こんにちは")
         {
             this.animator.SetBool("Pause1", true);
             if (this.animator.GetBool("Pause1"))
@@ -83,6 +137,7 @@ public class UnityChanScript : MonoBehaviour {
             this.animator.SetBool("Pause1", false);
             this.animator.SetBool("Pause2", false);
         } */
+
     }
 
     // 発言の分類が完了したときに呼ばれる
