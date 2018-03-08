@@ -100,44 +100,6 @@ public class UnityChanScript : MonoBehaviour {
 			}
 		}
 		*/
-
-		// 呼びかけと応答のルーチンはonCompleteClassificationに移動しました
-
-		/* if (VoiceString=="こんにちは")
-        {
-            this.animator.SetBool("Pause1", true);
-            if (this.animator.GetBool("Pause1"))
-            {
-                synth.speak("ただいまマイクのテスト中", pitch: 1.5);
-            }
-            VoiceString = "";
-            context.Call("endMuteSound");
-            context.Call("startRecognition");       //再び音声認識を開始
-        }
-        else if (VoiceString == "じゃあね")
-        {
-            this.animator.SetBool("Pause2", true);
-            if (this.animator.GetBool("Pause2"))
-            {
-                synth.speak("声の高さも自由自在", pitch: 1.0);
-            }
-            VoiceString = "";
-            context.Call("endMuteSound");
-            context.Call("startRecognition");       //再び音声認識を開始
-        }
-        else
-        {
-            if (VoiceString != "") {
-                dc.Talk(VoiceString, onReply);
-                VoiceString = "";
-                context.Call("endMuteSound");
-                context.Call("startRecognition");
-            }
-
-            this.animator.SetBool("Pause1", false);
-            this.animator.SetBool("Pause2", false);
-        } */
-
     }
 
     // 発言の分類が完了したときに呼ばれる
@@ -151,6 +113,14 @@ public class UnityChanScript : MonoBehaviour {
                 slots["hereArround"].slotValue != "none")
             {
                 synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
+				int act = 1;
+				if (act==1) {
+					this.animator.SetBool ("noweather", true);	//lose00を動かす
+					act=0;
+				} 
+				if (act != 1) {
+					this.animator.SetBool ("noweather", false);
+				} 
             }
             else {
                 day = 0;
@@ -167,9 +137,27 @@ public class UnityChanScript : MonoBehaviour {
         }
         else if (askTimePattern.Contains(utterance)) {
             synth.speak(context.Call<string>("getNowTime"));
+			//what time
+			int act = 1;
+			if (act==1) {
+				this.animator.SetBool ("nowtime", true);
+				act = 0;
+			}
+			if (act!=1) {
+				this.animator.SetBool ("nowtime", false);
+			}
         }
         else if (askDatePattern.Contains(utterance)) {
             synth.speak(context.Call<string>("getNowDate"));
+			//what day
+			int act = 1;
+			if (act==1) {
+				this.animator.SetBool ("nowdate", true);
+				act = 0;
+			}
+			if (act!=1) {
+				this.animator.SetBool ("nowdate", false);
+			}
         }
         else {
             dc.Talk(utterance, onReply);
@@ -193,6 +181,15 @@ public class UnityChanScript : MonoBehaviour {
         else
         {
             synth.speak(str);
+		    //how weather
+		    int act=1;
+		    if (act==1) {
+			    this.animator.SetBool ("weather", true);
+			    act = 0;
+		    }
+		    if (act!=1) {
+			    this.animator.SetBool ("weather", false);
+		    }
         }
     }
 }

@@ -68,7 +68,7 @@ public class FollowingUnityChan : MonoBehaviour
         if (looking)
         {
             lookTime+= Time.deltaTime;
-            if (lookTime >= 180)
+            if (lookTime >= 5)
             {
                 Debug.Log("あんまり見ないで");
                 lookTime = 0;
@@ -79,7 +79,7 @@ public class FollowingUnityChan : MonoBehaviour
         else
         {
             notLookTime+= Time.deltaTime;
-            if (notLookTime >= 180)
+            if (notLookTime >= 10)
             {
                 Debug.Log("なにしてるの？");
                 notLookTime = 0;
