@@ -64,6 +64,7 @@ public class FollowingUnityChan : MonoBehaviour
             action = 0;
         }
 
+        /*
         //unityちゃんを見続けたときの処理
         if (looking)
         {
@@ -84,7 +85,7 @@ public class FollowingUnityChan : MonoBehaviour
                 GetComponent<UnityChanScript>().GetSpeaker().speak("なにしてるの？");
                 notLookTime = 0;
             }
-        }
+        }*/
     }
 
     public void follow() {
