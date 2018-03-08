@@ -24,6 +24,7 @@ public class FollowingUnityChan : MonoBehaviour
     private bool looking=true;
     private float lookTime = 0;
     private float notLookTime = 0;
+    private SpeechSynthesizer synth;
 
 
     void Start()
@@ -32,6 +33,8 @@ public class FollowingUnityChan : MonoBehaviour
         target.y = 0;
         target.z = 0;
         this.animator = GetComponent<Animator>();
+
+        synth = new SpeechSynthesizer(SpeechSynthesizer.Voice.maki, this)
     }
 
     void Update()

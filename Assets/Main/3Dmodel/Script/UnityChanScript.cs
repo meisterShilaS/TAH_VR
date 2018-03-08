@@ -27,6 +27,8 @@ public class UnityChanScript : MonoBehaviour {
 
     private FollowingUnityChan followingScript;
 
+    private int day;
+
     // Use this for initialization
     void Start () {
         this.animator = GetComponent<Animator>();
@@ -96,7 +98,7 @@ public class UnityChanScript : MonoBehaviour {
                 synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
             }
             else {
-                int day = 0;
+                day = 0;
                 string date = slots["date"].slotValue;
                 if (date == "今日") day = 1;
                 else if(date == "明日") day = 2;
@@ -130,6 +132,13 @@ public class UnityChanScript : MonoBehaviour {
 
     public void speakWeather(string str)
     {
-        synth.speak(str);
+        if (str == null)
+        {
+            context.Call("startSearchWeather", day);
+        }
+        else
+        {
+            synth.speak(str);
+        }
     }
 }
