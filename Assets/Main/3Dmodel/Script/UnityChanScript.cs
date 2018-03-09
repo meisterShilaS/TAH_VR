@@ -26,6 +26,7 @@ public class UnityChanScript : MonoBehaviour {
     private AndroidJavaObject context;
 
     private FollowingUnityChan followingScript;
+    private int action = 0;
 
     private int day;
 
@@ -47,6 +48,8 @@ public class UnityChanScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if(action!=0) falseAction(action);
+
 		//試すよう 条件に合うモーション下に
 		//候補 天気〇wait02　天気×lose00,refresh00 時間〇wait01　日付〇wait01,wait03　　
 
@@ -113,14 +116,9 @@ public class UnityChanScript : MonoBehaviour {
                 slots["hereArround"].slotValue != "none")
             {
                 synth.speak("ごめんなさい、特定の場所の天気はわからないんです。");
-				int act = 1;
-				if (act==1) {
-					this.animator.SetBool ("noweather", true);	//lose00を動かす
-					act=0;
-				} 
-				if (act != 1) {
-					this.animator.SetBool ("noweather", false);
-				} 
+                falseAction(action);
+                action = 1;
+				this.animator.SetBool ("noweather", true);	//lose00を動かす
             }
             else {
                 day = 0;
@@ -137,27 +135,17 @@ public class UnityChanScript : MonoBehaviour {
         }
         else if (askTimePattern.Contains(utterance)) {
             synth.speak(context.Call<string>("getNowTime"));
-			//what time
-			int act = 1;
-			if (act==1) {
-				this.animator.SetBool ("nowtime", true);
-				act = 0;
-			}
-			if (act!=1) {
-				this.animator.SetBool ("nowtime", false);
-			}
+            //what time
+            falseAction(action);
+            action = 2;
+			this.animator.SetBool ("nowtime", true);
         }
         else if (askDatePattern.Contains(utterance)) {
             synth.speak(context.Call<string>("getNowDate"));
-			//what day
-			int act = 1;
-			if (act==1) {
-				this.animator.SetBool ("nowdate", true);
-				act = 0;
-			}
-			if (act!=1) {
-				this.animator.SetBool ("nowdate", false);
-			}
+            //what day
+            falseAction(action);
+            action = 3;
+			this.animator.SetBool ("nowdate", true);
         }
         else {
             dc.Talk(utterance, onReply);
@@ -181,15 +169,10 @@ public class UnityChanScript : MonoBehaviour {
         else
         {
             synth.speak(str);
-		    //how weather
-		    int act=1;
-		    if (act==1) {
-			    this.animator.SetBool ("weather", true);
-			    act = 0;
-		    }
-		    if (act!=1) {
-			    this.animator.SetBool ("weather", false);
-		    }
+            //how weather
+            falseAction(action);
+            action = 4;
+			this.animator.SetBool ("weather", true);
         }
     }
 
@@ -199,5 +182,25 @@ public class UnityChanScript : MonoBehaviour {
 
     public void startRecognition() {
         context.Call("startRecognition");
+    }
+
+    private void falseAction(int act)
+    {
+        if (act == 1)
+        {
+            this.animator.SetBool("noweather", false);
+        }
+        else if (act == 2)
+        {
+            this.animator.SetBool("nowtime", false);
+        }
+        else if (act == 3)
+        {
+            this.animator.SetBool("nowdate", false);
+        }
+        else if (act == 4)
+        {
+            this.animator.SetBool("weather", false);
+        }
     }
 }

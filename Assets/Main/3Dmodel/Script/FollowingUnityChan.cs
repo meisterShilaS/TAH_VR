@@ -26,12 +26,20 @@ public class FollowingUnityChan : MonoBehaviour
     private float lookTime = 0;
     private float notLookTime = 0;
 
+    private AndroidJavaClass unityPlayer;
+    private AndroidJavaObject context;
+
+    private bool previousFollowingFlag = false;
+
     void Start()
     {
         target.x = 0;
         target.y = 0;
         target.z = 0;
         this.animator = GetComponent<Animator>();
+
+        unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
     }
 
     void Update()
@@ -57,11 +65,15 @@ public class FollowingUnityChan : MonoBehaviour
             position.z = Mathf.Sin(Time.time-startTime+startTheta) * radius;
             this.transform.position = position;
             this.transform.LookAt(target);
+
+            previousFollowingFlag = true;
         }
-        else if(lockOn)
+        else if(lockOn && previousFollowingFlag)
         {
             this.animator.SetBool("Run_R", false);
             action = 0;
+            context.Call("startRecognition");
+            previousFollowingFlag = false;
         }
 
         /*
@@ -99,6 +111,7 @@ public class FollowingUnityChan : MonoBehaviour
         lockOn = false;
         looking = true;
         notLookTime = 0;
+        if()
     }
     
     //ポインタがunityちゃんから出たときの処理
